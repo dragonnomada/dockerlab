@@ -14,5 +14,5 @@ app.get("/about", (request, response) => {
 const server =http.createServer(app)
 
 server.listen(3002, "localhost", () => {
-    console.log("Servidor iniciado en http://localhost:3000")
+    console.log("Servidor iniciado en http://localhost:3002")
 })
