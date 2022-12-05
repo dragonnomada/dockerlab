@@ -1,0 +1,26 @@
+Docker y Kubernetes para Desarrolladores
+
+101 Introducción a los Servicios Web
+	- Ambientes de Desarrollo Backend y Frontend
+	- Servidores Estáticos y Dinámicos
+	- Servidores Node JS
+	- Servidores React JS
+102 Introducción a Docker
+	- Concepto de Imagen
+	- Concepto de Contenedor
+	- Concepto de Conterenización
+	- Ejemplos de Aplicación
+103 Imágenes y Contenedores
+	- Descargar e Inspeccionar Inspeccionar una imagen
+	- Inicializar y Detener una imagen como contenedor
+	- Acceder y Modificar un contenedor
+	- Eliminar contenedores e imágenes
+104 Dockerfile y Mapeo de puertos
+	- Puertos internos y Externos del contenedor
+	- Inicializar el contenedor con Mapeo de Puertos
+	- Contrucción de imágenes mediante el Dockerfile
+	- Proyecto de Aplicación
+105 Variables de Entorno
+106 DockerHub Push & Pull
+107 Proyecto 1 - Login & Todo App
+
