@@ -11,7 +11,7 @@ Docker y Kubernetes para Desarrolladores
 	- Concepto de Conterenización
 	- Ejemplos de Aplicación
 103 Imágenes y Contenedores
-	- Descargar e Inspeccionar Inspeccionar una imagen
+	- Inspeccionar Inspeccionar una imagen
 	- Inicializar y Detener una imagen como contenedor
 	- Acceder y Modificar un contenedor
 	- Eliminar contenedores e imágenes
@@ -21,6 +21,14 @@ Docker y Kubernetes para Desarrolladores
 	- Contrucción de imágenes mediante el Dockerfile
 	- Proyecto de Aplicación
 105 Variables de Entorno
+	- Uso de las variables de entorno en la aplicación
+	- Pasar variables de entorno al iniciar el contenedor
+	- Definir variables de entorno en el Dockerfile
+	- Proyecto de Aplicación
 106 DockerHub Push & Pull
+	- Inspeccionar el DockerHub
+	- Subir una imagen al DockerHub
+	- Descargar imágenes del DockerHub
+	- Ejemplos de Aplicación
 107 Proyecto 1 - Login & Todo App
 
