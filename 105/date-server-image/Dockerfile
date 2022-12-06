@@ -1,0 +1,16 @@
+FROM node:18
+
+COPY index.js /app/index.js
+
+WORKDIR /app
+
+CMD node .
+
+ENV YEARS=0
+ENV MONTHS=0
+ENV DAYS=0
+ENV HOURS=0
+ENV MINUTES=0
+ENV SECONDS=0
+
+EXPOSE 3000

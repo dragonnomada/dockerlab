@@ -31,4 +31,48 @@ Docker y Kubernetes para Desarrolladores
 	- Descargar imágenes del DockerHub
 	- Ejemplos de Aplicación
 107 Proyecto 1 - Login & Todo App
-
+	- Api de Login
+	- Api de Todo
+	- Interfaz de Login
+	- Interfaz de Todo
+108 Volúmenes
+	- Crear un volumen
+	- Montar un volumen
+	- Bind mounts
+	- Tmpfs mounts
+109 Redes
+	- Usar el bridge por defecto
+	- Crear un bridge personalizado
+	- Ejecutar contenedores en la misma red
+	- Caso práctico
+110 Docker Compose
+	- El archivo compose.yaml
+	- Services
+	- Networks
+	- Volumes
+	- Ejemplos prácticos
+111 Docker Swarm
+	- Concepto de Master y Worker
+	- Inicializar el Master
+	- Agregar un Worker
+	- Proyecto de Aplicación
+112 Creación avanzada de imágenes
+	- Argumentos
+	- Stages
+	- Construcción en Docker Compose
+	- Ejemplos de Aplicación
+113 Despliegue en la nube
+	- Configuración de un servidor en la nube
+	- Instalación automatizada de Docker
+	- Configuración de nodos
+	- Docker Dashboard
+114 Proyecto 2 - Wordpress con Mysql
+	- Configuración de Mysql
+	- Configuración de Wordpress
+	- Configuración en Docker Compose
+	- Agregar volúmenes y redes
+115 Proyecto 3 - Capturador de Productos con React
+	- Base de Datos de Productos
+	- Api de captura de Productos
+	- Interfaz de captura de Productos
+	- Imágenes de desarrollo, pruebas y productiva
