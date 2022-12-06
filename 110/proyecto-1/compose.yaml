@@ -1,0 +1,18 @@
+# Docker Compose - Todo Project
+
+services:
+  todoapp:
+    image: todoapp:1.0.1
+    build: ./todo-app-image
+    ports:
+      - "9090:80"
+  todoserver:
+    image: todoserver:1.0.1
+    build: ./todo-server-image
+    ports:
+      - "9091:3000"
+  tododb:
+    image: tododb:1.0.1
+    build: ./todo-db-image
+    ports:
+      - "33306:3306"

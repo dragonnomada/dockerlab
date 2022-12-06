@@ -1,0 +1,17 @@
+FROM node:18
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+CMD node .
+
+ENV MYSQL_HOST="localhost"
+ENV MYSQL_PORT="3306"
+ENV MYSQL_DB="test"
+ENV MYSQL_USER="root"
+ENV MYSQL_PASSWORD="password"
+
+EXPOSE 3000
