@@ -8,7 +8,7 @@ async function allTodos(username, token) {
         "select * from todos where username=?",
         [username]
     )
-    
+
     return todos
 }
 
@@ -38,7 +38,7 @@ async function updateTodoByIdWithChecked(id, username, token, checked) {
     const user = await login.verifyToken(username, token)
 
     const [result] = await db.executeUpdate(
-        "update todos set checked=?, update_at=now() where id=? and id_user=?",
+        "update todos set checked=?, checked_at=now(), update_at=now() where id=? and id_user=?",
         [checked, id, user.id]
     )
 

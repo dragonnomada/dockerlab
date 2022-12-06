@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <style>
+        .todo-item {
+            display: flex;
+        }
+        .todo-item label.checked {
+            text-decoration: line-through;
+        }
+        .todo-item-dates {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.6em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="todo-login" hidden>
+        <h1>Bienvenido a Todo App</h1>
+        <h2>Iniciar Sesión</h2>
+        <form class="todo-login-form" action="#" method="post">
+            <input id="todo-login-username" type="text" placeholder="Usuario">
+            <input id="todo-login-password" type="password" placeholder="Contraseña">
+            <input type="submit" value="Iniciar sesión">
+        </form>
+    </div>
+
+    <div class="todo-capture">
+        <h1>Bienvenido a Todo App</h1>
+        <h2>Agrega algo por hacer...</h2>
+        <form class="todo-capture-form" action="#" method="post">
+            <input id="todo-label" type="text" placeholder="Escribe algo por hacer...">
+            <input type="submit" value="Agregar todo">
+        </form>
+    </div>
+
+    <div class="todo-list"></div>
+
+    <script>
+        let user = null
+        let host = "localhost"
+        let port = "8080"
+
+        const todoLoginContainer = document.querySelector(".todo-login")
+        const todoCaptureContainer = document.querySelector(".todo-capture")
+        const todoListContainer = document.querySelector(".todo-list")
+
+        const todoLoginForm = document.querySelector(".todo-login-form")
+        const todoCaptureForm = document.querySelector(".todo-capture-form")
+
+        const todoLabel = document.getElementById("todo-label")
+
+        todoCaptureForm.addEventListener("submit", async event => {
+            event.preventDefault()
+            
+            if (/^[\s\n\t]*$/.test(todoLabel.value)) return
+
+            console.log("Agregando todo...")
+
+            await fetchAddTodo(todoLabel.value)
+            
+            updateTodos()
+
+            todoLabel.value = ""
+        })
+
+        todoLoginForm.addEventListener("submit", async event => {
+            event.preventDefault()
+
+            console.log("Iniciando Sesión...")
+
+            for (let child of todoLoginForm.childNodes) {
+                child.disabled = true
+            }
+
+            user = await fetchSignIn()
+
+            for (let child of todoLoginForm.childNodes) {
+                child.disabled = false
+            }
+
+            if (user) {
+                todoLoginContainer.hidden = true
+
+                console.log(user)
+
+                localStorage.setItem("user", JSON.stringify(user))
+
+                await app()
+            }
+
+        })
+
+        async function app() {
+            await fetchEnv()
+
+            user = JSON.parse(localStorage.getItem("user") || "null")
+
+            console.log(user)
+
+            if (!user) {
+                todoLoginContainer.hidden = false
+            } else {
+                await updateTodos()
+            }
+        }
+
+        async function updateTodos() {
+            const todos = await fetchTodos(user)
+            todoListContainer.innerHTML = ""
+            for (let todo of todos.reverse()) {
+                const div = document.createElement("div")
+                div.className = "todo-item"
+                div.innerHTML = `
+                    <input id="checkbox-${todo.id}" type="checkbox" ${todo.checked ? 'checked' : ''}>
+                    <div class="todo-item-info">
+                        <label id="checkbox-${todo.id}" class="${todo.checked ? 'checked' : ''}">${todo.label}</label>
+                        <div class="todo-item-dates">
+                            <span>${todo.create_at}</span>
+                            <span>${todo.checked_at}</span>
+                        </div>
+                    </div>
+                `
+                const label = div.querySelector("label")
+                const checkbox = div.querySelector("input[type='checkbox']")
+                checkbox.addEventListener('change', event => {
+                    label.className = checkbox.checked ? 'checked' : ''
+                    console.log(todo, checkbox.checked)
+                    const currentTodo = fetchUpdateTodoChecked(todo, checkbox.checked)
+                    // if (checkbox.checked !== !!currentTodo.checked) {
+                    //     alert('Error al actualizar el todo')
+                    //     todo.checked = currentTodo.checked
+                    // }
+                })
+                todoListContainer.append(div)
+            }
+        }
+
+        async function fetchEnv() {
+            const url = `./env`
+            const response = await fetch(url)
+            if (response.ok) {
+                const env = await response.text()
+                host = env.match(/HOST\s*\=\s*\"?([^\"\s\n]+)/)[1]
+                port = env.match(/PORT\s*\=\s*\"?([^\"\s\n]+)/)[1]
+                console.log({ host, port })
+            } else {
+                const error = await response.text()
+                alert(`${error}`)
+            }
+        }
+
+        async function fetchTodos() {
+            const query = `username=${user.username}&token=${user.token}`
+            const url = `http://${host}:${port}/api/todo/all?${query}`
+            const response = await fetch(url, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            if (response.ok) {
+                const todos = await response.json()
+                return todos
+            } else {
+                const error = await response.text()
+                alert(`${error}`)
+            }
+        }
+
+        async function fetchSignIn() {
+            const url = `http://${host}:${port}/api/login/signin`
+            const response = await fetch(url, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: document.getElementById("todo-login-username").value,
+                    password: document.getElementById("todo-login-password").value
+                })
+            })
+            if (response.ok) {
+                user = await response.json()
+                return user
+            } else {
+                const error = await response.text()
+                alert(`${error}`)
+            }
+        }
+
+        async function fetchAddTodo(label) {
+            const url = `http://${host}:${port}/api/todo/add`
+            const response = await fetch(url, {
+                method: "put",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    label,
+                    username: user.username,
+                    token: user.token
+                })
+            })
+            if (response.ok) {
+                currentTodo = await response.json()
+                return currentTodo
+            } else {
+                const error = await response.text()
+                alert(`${error}`)
+            }
+        }
+
+        async function fetchUpdateTodoChecked(todo, checked) {
+            const url = `http://${host}:${port}/api/todo/${todo.id}/update`
+            const response = await fetch(url, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    checked,
+                    username: user.username,
+                    token: user.token
+                })
+            })
+            if (response.ok) {
+                currentTodo = await response.json()
+                return currentTodo
+            } else {
+                const error = await response.text()
+                alert(`${error}`)
+            }
+        }
+
+        app().catch(error => console.error(error))
+    </script>
+
+</body>
+
+</html>
