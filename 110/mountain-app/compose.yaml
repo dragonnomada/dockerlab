@@ -1,0 +1,32 @@
+services:
+    landing-service:
+        image: landing-home:1.0.2
+        build: ./landing-home
+        networks:
+            mountain-compose-net:
+                ipv4_address: "172.30.12.11"
+    dashboard-service:
+        image: dashboard-home:1.0.1
+        build: ./dashboard-home
+        networks:
+            mountain-compose-net:
+                ipv4_address: "172.30.12.12"
+    proxy-service:
+        depends_on:
+            - landing-service
+            - dashboard-service
+        image: proxy-home:1.0.1
+        build: ./proxy-home
+        restart: on-failure
+        ports:
+            - "8080:80"
+        networks:
+            - mountain-compose-net
+
+networks:
+    mountain-compose-net:
+        ipam:
+            driver: default
+            config:
+                - subnet: "172.30.0.0/16"
+                  ip_range: "172.30.12.0/24"
