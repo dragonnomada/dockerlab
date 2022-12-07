@@ -52,8 +52,8 @@ Docker y Kubernetes para Desarrolladores
 	- Volumes
 	- Ejemplos prácticos
 111 Docker Swarm
-	- Concepto de Master y Worker
-	- Inicializar el Master
+	- Concepto de Manager y Worker
+	- Inicializar el Manager
 	- Agregar un Worker
 	- Proyecto de Aplicación
 112 Creación avanzada de imágenes
