@@ -4,7 +4,7 @@ services:
   todoapp:
     depends_on:
       - todoserver
-    image: todoapp:1.0.3
+    image: todoapp:1.0.6
     build: ./todo-app-image
     restart: always
     environment:
@@ -17,7 +17,7 @@ services:
   todoserver:
     depends_on:
       - tododb
-    image: todoserver:1.0.5
+    image: todoserver:1.0.6
     build: ./todo-server-image
     restart: always
     environment:

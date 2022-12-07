@@ -7,6 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo App</title>
     <style>
+        .todo-login {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: white;
+        }
+        .todo-login form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 50%;
+        }
+        .todo-login form input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
         .todo-item {
             display: flex;
         }
@@ -23,7 +45,7 @@
 
 <body>
 
-    <div class="todo-login" hidden>
+    <div class="todo-login" style="display: none;">
         <h1>Bienvenido a Todo App</h1>
         <h2>Iniciar Sesión</h2>
         <form class="todo-login-form" action="#" method="post">
@@ -34,7 +56,10 @@
     </div>
 
     <div class="todo-capture">
-        <h1>Bienvenido a Todo App</h1>
+        <div class="todo-header">
+            <h1>Bienvenido a Todo App</h1>
+            <button onclick="fetchSignOut()">Cerrar Sesión</button>
+        </div>
         <h2>Agrega algo por hacer...</h2>
         <form class="todo-capture-form" action="#" method="post">
             <input id="todo-label" type="text" placeholder="Escribe algo por hacer...">
@@ -88,7 +113,7 @@
             }
 
             if (user) {
-                todoLoginContainer.hidden = true
+                todoLoginContainer.style.display = "none"
 
                 console.log(user)
 
@@ -107,7 +132,7 @@
             console.log(user)
 
             if (!user) {
-                todoLoginContainer.hidden = false
+                todoLoginContainer.style.display = "flex"
             } else {
                 await updateTodos()
             }
@@ -136,7 +161,7 @@
                     console.log(todo, checkbox.checked)
                     const currentTodo = fetchUpdateTodoChecked(todo, checkbox.checked)
                     // if (checkbox.checked !== !!currentTodo.checked) {
-                    //     alert('Error al actualizar el todo')
+                    //     showError('Error al actualizar el todo')
                     //     todo.checked = currentTodo.checked
                     // }
                 })
@@ -154,7 +179,7 @@
                 console.log({ host, port })
             } else {
                 const error = await response.text()
-                alert(`${error}`)
+                showError(`${error}`)
             }
         }
 
@@ -172,7 +197,7 @@
                 return todos
             } else {
                 const error = await response.text()
-                alert(`${error}`)
+                showError(`${error}`)
             }
         }
 
@@ -193,7 +218,32 @@
                 return user
             } else {
                 const error = await response.text()
-                alert(`${error}`)
+                showError(`${error}`)
+            }
+        }
+
+        function signOut() {
+            localStorage.removeItem("user")
+            window.location.reload()
+        }
+        
+        async function fetchSignOut() {
+            const url = `http://${host}:${port}/api/login/signout`
+            const response = await fetch(url, {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: user.username,
+                    token: user.token
+                })
+            })
+            if (response.ok) {
+                signOut()
+            } else {
+                const error = await response.text()
+                showError(`${error}`)
             }
         }
 
@@ -215,7 +265,7 @@
                 return currentTodo
             } else {
                 const error = await response.text()
-                alert(`${error}`)
+                showError(`${error}`)
             }
         }
 
@@ -237,7 +287,15 @@
                 return currentTodo
             } else {
                 const error = await response.text()
-                alert(`${error}`)
+                showError(`${error}`)
+            }
+        }
+
+        function showError(error) {
+            if (/using\stoken/.test(error)) {
+                signOut()
+            } else {
+                alert(error)
             }
         }
 
