@@ -25,3 +25,5 @@ create table todos (
 );
 
 insert into users (username, passwd) values ('test1', 'test123');
+
+insert into users (username, passwd) values ('test2', 'test456');

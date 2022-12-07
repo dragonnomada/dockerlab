@@ -9,13 +9,22 @@ const password = process.env.MYSQL_PASSWORD || "password"
 let connection = null
 
 async function connect() {
-    connection = await mysql.createConnection({
+    console.log({
         host,
-        port,
+        port: Number(port),
         database,
         user,
         password
     })
+
+    connection = await mysql.createConnection({
+        host,
+        port: Number(port),
+        database,
+        user,
+        password
+    })
+
     return connection
 }
 

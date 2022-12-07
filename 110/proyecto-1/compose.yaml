@@ -2,17 +2,50 @@
 
 services:
   todoapp:
-    image: todoapp:1.0.1
+    depends_on:
+      - todoserver
+    image: todoapp:1.0.3
     build: ./todo-app-image
+    restart: always
+    environment:
+      - HOST=localhost
+      - PORT=9091
     ports:
       - "9090:80"
+    networks:
+      - todonet
   todoserver:
-    image: todoserver:1.0.1
+    depends_on:
+      - tododb
+    image: todoserver:1.0.5
     build: ./todo-server-image
+    restart: always
+    environment:
+      - MYSQL_HOST=tododb
+      - MYSQL_PORT=3306
+      - MYSQL_DB=todoapp
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=abc123
     ports:
       - "9091:3000"
+    networks:
+      - todonet
   tododb:
-    image: tododb:1.0.1
-    build: ./todo-db-image
+    # image: tododb:1.0.2
+    image: mysql
+    # build: ./todo-db-image
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_DATABASE: todoapp
+    volumes:
+      - D:\GitHub\dockerlab\110\proyecto-1\todo-db-image\:/docker-entrypoint-initdb.d:ro
     ports:
-      - "33306:3306"
+      - "9093:3306"
+    networks:
+      - todonet
+
+networks:
+  todonet:
+    name: "todonet"
