@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  hello-server:
+    image: dragonnomada/hello-server:latest
+    deploy:
+      mode: replicated
+      replicas: 10
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123
+      MYSQL_DATABASE: demo
+    ports:
+      - "3306:3306"
+  nginx:
+    image: nginx
+    deploy:
+      mode: replicated
+      replicas: 6
