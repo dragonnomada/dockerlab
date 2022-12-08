@@ -1,0 +1,22 @@
+{
+  "name": "tienda-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "pkg": {
+    "targets": [ "node18-alpine-x64" ],
+    "outputPath": "dist"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mysql2": "^2.3.3"
+  }
+}

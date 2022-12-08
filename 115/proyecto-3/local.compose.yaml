@@ -1,0 +1,66 @@
+name: proyecto-3
+
+services:
+    tienda-db-service:
+        image: mysql
+        # image: tienda-db:1.0.0r22
+        # build: ./tienda-db
+        # build:
+        #     context: ./tienda-db
+        #     # dockerfile: Dockerfile
+        #     target: test
+        #     # target: prod
+        environment:
+            MYSQL_RANDOM_ROOT_PASSWORD: 1
+            MYSQL_DATABASE: tienda
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: tienda_admin_123
+        volumes:
+            # - tienda-vol-db:/var/lib/mysql
+            - D:\GitHub\dockerlab\115\proyecto-3\tienda-db:/docker-entrypoint-initdb.d
+        networks:
+            - tienda-net-db
+        restart: always
+    tienda-api-service:
+        depends_on:
+            - tienda-db-service
+        image: tienda-api:1.0.0r7
+        build:
+            context: ./tienda-server
+            # target: test
+            target: dev
+        environment:
+            DB_HOST: tienda-db-service
+            DB_PORT: 3306
+            DB_NAME: tienda
+            DB_USER: admin
+            DB_PASSWORD: tienda_admin_123
+        networks:
+            - tienda-net-db
+            - tienda-net-api
+        restart: always
+        ports:
+            - "4001:3000"
+    tienda-app-service:
+        depends_on:
+            - tienda-api-service
+        image: tienda-app:1.0.0r1
+        build:
+            context: ./tienda-app
+            target: dev
+        environment:
+            REACT_APP_SERVER_HOST: tienda-api-service
+            REACT_APP_SERVER_PORT: 3000
+        networks:
+            - tienda-net-api
+            - tienda-net-app
+        ports:
+            - "4000:3000"
+
+volumes:
+    tienda-vol-db: {}
+
+networks:
+    tienda-net-db: {}
+    tienda-net-api: {}
+    tienda-net-app: {}

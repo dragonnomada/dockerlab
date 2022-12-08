@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Ejecutando el entrypoint.sh"
+
+./entrypoint.sh
+
+echo "Encendiendo MYSQL 🐼"
+
+./docker-entrypoint.sh
+
+while true
+do
+    echo "Base de datos operando"
+    sleep 60
+done
