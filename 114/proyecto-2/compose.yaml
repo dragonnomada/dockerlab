@@ -1,0 +1,30 @@
+services:
+    mysql-service:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: wordpress$123
+            MYSQL_DATABASE: wordpress
+        volumes:
+            - mysql_wordpress:/var/lib/mysql
+        networks:
+            wordpress_net: {}
+    wordpress-service:
+        depends_on: 
+            - mysql-service
+        image: wordpress
+        environment:
+            WORDPRESS_DB_HOST: mysql-service:3306
+            WORDPRESS_DB_USER: root
+            WORDPRESS_DB_PASSWORD: wordpress$123
+            WORDPRESS_DB_NAME: wordpress
+            WORDPRESS_TABLE_PREFIX: wp_
+        networks:
+            wordpress_net: {}
+        ports:
+            - "80:80"
+
+volumes:
+    mysql_wordpress: {}
+
+networks:
+    wordpress_net: {}
