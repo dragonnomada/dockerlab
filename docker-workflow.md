@@ -162,15 +162,15 @@ networks:
 Docker CLI | Descripción
 --- | ---
 `docker network create <network name>` | Crea una nueva red
-`docker network create --driver=<bridge|host|null> --subnet=<net mask> --ip-range=<ip mask> <network name>` | Crea una nueva red con configuraciones específicas
+`docker network create --driver=<bridge/host/null> --subnet=<net mask> --ip-range=<ip mask> <network name>` | Crea una nueva red con configuraciones específicas
 `docker volume create <volume name>` | Crea un nuevo volumen
 `docker volume create --type=<volume|bind|tmpfs [...options] <volume name>` | Crea un nuevo volumen con opciones personalizadas
-`docker network ls | inspect <network name>` | Inspeciona las redes
-`docker volume ls | inspect <volume name>` | Inspeciona los volúmenes
+`docker network ls / inspect <network name>` | Inspeciona las redes
+`docker volume ls / inspect <volume name>` | Inspeciona los volúmenes
 `docker compose up -d` | Levanta un conjunton de contenedores según el `compose.yaml`
 `docker compose -f <path .yaml> up -d` | Levanta un conjunto de contenedores según el `<path .yaml>`
 `docker compose down` | Da de baja el conjunto de contenedores y libera sus recursos (`docker stop -> docker rm`).
-`docker compose ls | top | logs` | Monitorean los contenedores orquestados
+`docker compose ls / top / logs` | Monitorean los contenedores orquestados
 
 ## 3. Generar un clúster de contenedores mediante *Docker Swarm*
 
@@ -181,10 +181,10 @@ Los nodos tipo *Manager* nos permitirán levantar contenedores y los tipo *Worke
 Docker CLI | Descripción
 --- | ---
 `docker swarm init [...options]` | Convierte el *host* en un nodo *Manager*
-`docker swarm join-token worker|manager` | Recupera el comando con todo y token
+`docker swarm join-token worker/manager` | Recupera el comando con todo y token
 `docker swarm join <<token>> <<ip:port>>` | Agrega en el *Manager* un nodo en modo *worker* o *manager* según el `<<token>>`
 `docker service create --name <service name> [...options] <image>:<tag>` | Levanta un contenedor como servicios (en los nodos de *Docker Swarm*) al estilo `docker run`
-`docker service ls | inspect <service name>`
+`docker service ls / inspect <service name>`
 `docker stack deploy --compose-file <path .yaml> <stack name>` | **Levanta contenedores en forma de servicios** definidos por el archivo de *Docker Compose* `<path .yaml>`. Esta es la forma más utilizada para administrar servicios y contenedores en el *clúster*.
 
 **IMPORTANTE:** Cuándo los nodos *Manager* y *Worker* no se encuentren dentro de la misma subred debemos usar la combinación de la opción `--advertise-addr=<public ip>:<*port>` y `--listen-addr=0.0.0.0:<*port>` para que los *Workers* y el *Manager* tenegan comunicación externa. No es lo ideal pero es lo práctico.
