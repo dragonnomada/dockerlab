@@ -44,7 +44,7 @@ services:
     tienda-app-service:
         depends_on:
             - tienda-api-service
-        image: tienda-app:1.0.0r1
+        image: tienda-app:1.0.0r2
         build:
             context: ./tienda-app
             target: dev
