@@ -1,0 +1,28 @@
+# kubectl explain deployments|deployment|deploy
+
+kind: Deployment
+
+apiVersion: apps/v1
+
+metadata:
+    name: hello-deployment
+
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            pod: hello-pod
+    strategy:
+        type: Recreate
+    # Pod Spec
+    template:
+        metadata:
+            name: hello-pod
+            labels:
+                pod: hello-pod
+        spec:
+            containers:
+              - name: hello-pod
+                image: nginx
+
+# kubectl apply -f hello-deployment.yaml

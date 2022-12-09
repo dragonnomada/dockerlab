@@ -1,0 +1,12 @@
+201 - Instalación de Kubeadm, Kubelet, Kebectl
+202 - Concepto de Pod
+203 - Monitoreo de Pods
+204 - Controladores
+205 - Replicasets
+206 - Deployments
+207 - Jobs
+208 - Práctica Mysql
+209 - Práctica Wordpress
+210 - Dashboard
+
+

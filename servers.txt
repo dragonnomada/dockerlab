@@ -1,3 +1,4 @@
 ssh -i docker-master.pem tih.online.inegi@34.74.210.50
+ssh -i docker-master.pem tih.online.inegi@35.196.196.40
 ssh -i docker-worker-1.pem tih.online.inegi@34.148.22.144
 ssh -i docker-worker-2.pem tih.online.inegi@34.23.27.218

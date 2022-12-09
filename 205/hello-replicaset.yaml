@@ -1,0 +1,28 @@
+# kubectl explain replicasets|replicaset|rs
+
+kind: ReplicaSet
+
+apiVersion: apps/v1
+
+metadata:
+    name: hello-replicaset
+
+spec:
+    replicas: 10
+    # DOC: https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/label-selector/#LabelSelector
+    # DOC: https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/label-selector/#LabelSelector
+    selector:
+        matchLabels:
+            pod: hello-pod
+    # Pod Spec
+    template:
+        metadata:
+            name: hello-pod
+            labels:
+                pod: hello-pod
+        spec:
+            containers:
+              - name: hello-pod
+                image: nginx
+
+# kubectl create -f hello-replicaset.yaml

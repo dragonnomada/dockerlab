@@ -1,0 +1,196 @@
+Evaluación final del Curso de Docker y Kubernetes para desarrolladores
+
+1. ¿Para qué sirve conterenizar las aplicaciones?
+
+a*) Para establecer una imagen inmutable que contenga la aplicación y su ambiente de ejecución, ya sean los códigos fuente o los binarios compilados de estos
+b) Para crear un contenedor que ejecute una máquina virtual VMShare o VMWare
+c) Para crear una imagen .iso que pueda ser montada como un disco externo en cualquier máquina o servidor
+
+2. ¿Cuál es el concepto más próximo a una Imagen de Docker?
+
+a*) Es una estampa de un subsistema adaptado para contener todas las librerías, programas y recursos de las que depende un sistema. Análogo a la definición de Ambiente o Entorno de Ejecución.
+b) Es un sistema operativo empaquetado para contener librerías y programas que necesitará un sistema para ejecutarse. Análogo a una Máquina Virtual.
+c) Es un conjunto de instrucciones necesarias para construir un contenedor, que se ejecutan al iniciar el contenedor y generan un ambiente productivo. Análogo a un Framework.
+
+3. ¿Cuál es el concepto más próximo a un Contenedor de Docker?
+
+a*) Es una instancia aislada que se mantiene ejecutando el comando principal definido en una imagen, y genera un subsitema independiente al de la máquina anfitrión, pero que utiliza el mismo kernel. Análogo a una Máquina Virtual ejecutándose.
+b) Es un servicio que permite acceder a la imagen mediante comandos de linux y determinar los volúmenes y puntos de montaje que serán sustituidos dentro del sistema de archivos de la imagen. Análogo a un servicio FTP/SSH hacía la imagen.
+c) Es un archivo TAR que puede ser transportado fácilmente entre máquinas de la misma arquitectura, permitiendo instalar imágenes en una u otra máquina con los mismos ambientes de producción.
+
+4. ¿Con qué comando se consultan las imágenes locales?
+
+a*) docker images | docker image ls
+b) docker list images | docker image list
+c) docker image list --all | docker image ps
+
+5. ¿Con qué comando se descarga de Docker Hub una imagen?
+
+a*) docker pull <image>:<tag>
+b) docker push <image>:<tag>
+c) docoker install <image>:<tag>
+
+6. ¿Con qué comando se ejecuta una imagen haciendo mapeo de puertos y en forma que no bloquee la terminal (detach)?
+
+a*) docker run -dp <hport>:<cport> <image>:<tag>
+b) docker exec --detach --port <hport>:<cport> <image>:<tag>
+c) docker container run --forward-port <hport>:<cport> <image>:<tag>
+
+7. ¿Con qué comando se consultan los contenedores que se encuentran activos e inactivos?
+
+a*) docker ps -a | docker container ls -a
+b) docker ps --show-all | docker containers all
+c) docker ps -A | docker container ls --full
+
+8. ¿Con qué opción sobre docker run se enlaza la carpeta del HOST /data a la carpeta del contenedor /app?
+
+a*) docker run -v /data:/app <image>:<tag>
+b) docker run -m /data:/app <image>:<tag>
+c) docker run -v source=/data,target=/app <image>:<tag>
+
+9. ¿Con qué comandos se crea un volumen llamado shared y se enlaza a la carpeta /app del contendor?
+
+a*) docker volume create shared && docker run -v shared:/app <image>:<tag>
+b) docker create volume shared && docker run -v shared:/app <image>:<tag>
+c) docker add volume=shared && docker run -v shared:/app <image>:<tag>
+
+10. ¿Cuál sería el contenido de un Dockerfile que use la imagen de Nginx y modifique el index.html por un <h1>hola mundo</h1> principal?
+
+a*)
+---
+FROM nginx
+RUN echo "<h1>hola mundo</h1>" > /usr/share/nginx/html/index.html
+CMD nginx -g "daemon off;"
+EXPOSE 80
+---
+b)
+---
+USE nginx
+RUN echo "<h1>hola mundo</h1>" > /usr/share/nginx/html/index.html
+CMD nginx -g "daemon off;"
+EXPOSE 80
+---
+c)
+---
+FROM nginx
+RUN echo "<h1>hola mundo</h1>" > /usr/share/nginx/html/index.html
+CMD nginx -g "daemon off;"
+LISTEN 80
+---
+
+11. ¿Qué describe mejor a Docker Swarm?
+
+a*) Es un mecanismo integrado al Docker Engine, que permite crear clústers basados en nodos administradores (Node Manager) y nodos trabajadores (Node Worker) para distribuir la carga de trabajo en los servicios que deseen ser replicados y escalados
+b) Es un mecanismo basado en Maestro-Esclavo que permite controlar otras instancias (Nodos) de Docker Engine formando un clúster de control a través de un solo nodo (Node Master)
+c) Es un mecanismo independiente al Docker Engine, que permite monitorear remotamente otras instancias en otras máquinas (Nodos) para crear un panel administrativo sobre todo el clúster de nodos (Node Job)
+
+12. ¿Qué describe mejor a Docker Compose?
+
+a*) Es un archivo YAML que contiene la configuración necesaria para orquestar servicios, volúmenes y redes para levantar y dar de baja automáticamente los contenedores con las imágenes especificadas. Análogo a un automatizador de comandos que tendrían que ejecutarse manualmente.
+b) Es un comando que permite registrar servicios al Docker Engine a través de un único comando que puede ser almacenado en scripts de bash para levantar y dar de baja automáticamente los contenedores con las imágenes especificadas. Análogo a un super comando de docker que compone al resto de comandos disponibles.
+c) Es un mecanismo que permite ejecutar de manera remota el mismo comando del Docker Engine sobre otros nodos registrados a la red, para orquestar despliegues simultáneos. Análogo a un propagador de comandos que evita ir a cada nodo y ejecutar el mismo comando al mismo tiempo.
+
+13. Suponiendo que existe la imagen en Docker Hub awesome/dashboard:latest y awesome/db:latest, ¿Cuál sería el archivo de Docker Compose para iniciar ambos servicios con el mismo volumen llamado shared sobre /data en el contenedor?
+
+a*) docker-compose.yml
+---
+name: awesome
+services:
+  dashboard:
+    image: awesome/dashboard:latest
+    ports:
+      - "5001:80"
+    volumes:
+      - shared:/data
+  db:
+    image: awesome/db:latest
+    ports:
+      - "5002:80"
+    volumes:
+      - shared:/data
+volumes:
+  shared:
+---
+b) docker-compose.json
+---
+{
+  "name": "awesome",
+  "services": {
+    "dashboard": {
+      "image": "awesome/dashboard:latest",
+      "ports": ["5001:80"],
+      "volumes": ["shared:/data"]
+    },
+    "db": {
+      "image": "awesome/db:latest",
+      "ports": ["5002:80"],
+      "volumes": ["shared:/data"]
+    }
+  },
+  "volumes": {
+    "shared": {}
+  }
+}
+---
+c) docker-compose.xml
+---
+<root>
+  <name>awesome</name>
+  <services>
+    <dashboard>
+      <image>awesome/dashboard:latest</image>
+      <ports>
+            <port>5001:80</port>
+      </ports>
+      <volumes>
+        <volume>shared:/data</volume>
+      <volumes>
+    </dashboard>
+    <db>
+      <image>awesome/db:latest</image>
+      <ports>
+            <port>5002:80</port>
+      </ports>
+      <volumes>
+        <volume>shared:/data</volume>
+      <volumes>
+    </db>
+  </services>
+  <volumes>
+    <shared />
+  </volumes>
+</root>
+---
+
+14. ¿Qué es Kubernetes respecto a Docker?
+
+a*) Una plataforma abierta para crear un clúster de contenedores similar a Docker Swarm pero permitiendo una configuración más fina y manejando un estado deseado a través de objetos
+b) Una plataforma abierta para manejar contenedores similar Docker Compose pero permitiendo generar Dashboards de monitoreo
+c) Una plataforma abierta para manejar imágenes de Docker similar a Docker Hub pero en una nube privada
+
+15. ¿Cúales son las herramientas princiapales de Kubernetes?
+
+a*) kubeadm, kubelet y kubectl
+b) kubeapi, kubepod y kubedeploy
+c) k8s, minikube y kind
+
+16. ¿Qué representa el Plano de Control?
+
+a*) Es el administrador principal de las peticiones al kubernete como `kubectl get po` que recupera los pods en ejecución
+b) Es el administrador principal de las peticiones al kubernete como `kubepod show all` que recupera los pods en ejecución
+b) Es el administrador principal de las peticiones al kubernete como `k8s show pods` que recupera los pods en ejecución
+
+17. (Dos puntos extra) Diseña un archivo Dockerfile que parta de la imagen `nginx:latest`, copie todos los archivos *.html sobre `/usr/share/nginx/html`, ejecute el comando principal `nginx -g "daemon off;" y exponga el puerto 80. Al final del archivo, agrega en un comentario el comando utilizado para compilar la imagen del Dockerfile.
+
+El nombre de la imagen debe ser: super-nginx
+El nombre de la etiqueta debe ser: 1.0.0
+
+GUÍA
+---
+# TODO: Extiende la imagen `nginx:latest`
+# TODO: Copia todos los archivos *.html sobre `/usr/share/nginx/html`
+# TODO: Ejecutar el comando principal nginx -g "daemon off;"
+# TODO: Exponer el puerto 80
+
+# TODO: Comentario con el comando utilizado para compilar la imagen usando este Dockerfile nombrando a la imagen super-nginx con etiqueta 1.0.0
+---
